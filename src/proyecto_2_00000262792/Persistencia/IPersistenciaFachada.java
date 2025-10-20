@@ -5,15 +5,15 @@ import proyecto_2_00000262792.*;
 public interface IPersistenciaFachada {
 
     public void agregarPaciente(Paciente paciente);
-    public void obtenerPacientePorId(int id);
+    public Paciente obtenerPacientePorId(int id);
     //Lista de pacientes aqui
 
     public void agregarMedico(Medico medico);
-    public void obtenerMedicoPorId(int id);
+    public Medico obtenerMedicoPorId(int id);
     //Lista de medicos aqui
 
     public void agregarEspecialidad(Especialidad especialidad);
-    public void obtenerEspecialidadPorId(int id);
+    public Especialidad obtenerEspecialidadPorId(int id);
     //Lista de especialidades aqui
 
     public void agregarEquipoMedico(EquipoMedico equipoMedico);
