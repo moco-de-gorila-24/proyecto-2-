@@ -2,8 +2,18 @@ package proyecto_2_00000262792.Persistencia;
 
 import proyecto_2_00000262792.Paciente;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class PersistenciaPacientes {
-    //Archivo pacientes
+    Path path = Paths.get("C:\\Users\\Central\\Documents\\NetBeansProjects\\proyecto_2_00000262792\\src\\proyecto_2_00000262792\\Archivos\\Inventario.txt");
+
+
+
+
 
     public PersistenciaPacientes(){
 

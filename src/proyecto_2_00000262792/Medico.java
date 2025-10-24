@@ -9,8 +9,12 @@ public class Medico {
 
     }
 
-    public Medico(int id, String nombre, Especialidad especialidad){
 
+
+    public Medico(int id, String nombre, Especialidad especialidad){
+        this.id = id;
+        this.nombre = nombre;
+        this.especialidad = especialidad;
     }
 
     public int getId() {

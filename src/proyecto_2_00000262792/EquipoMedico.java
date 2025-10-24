@@ -10,7 +10,8 @@ public class EquipoMedico {
     }
 
     public EquipoMedico(int id, String nombre, int cantidad){
-
+        this.id = id;
+        this.cantidad = cantidad;
     }
 
     public int getId() {

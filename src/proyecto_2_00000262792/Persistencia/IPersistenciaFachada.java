@@ -4,6 +4,16 @@ import proyecto_2_00000262792.*;
 
 public interface IPersistenciaFachada {
 
+    /*
+    Path path = Paths.get("C:\\Users\\Central\\Documents\\NetBeansProjects\\proyecto_2_00000262792\\src\\proyecto_2_00000262792\\Archivos\\Inventario.txt");
+        if( Files.notExists(path)){
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+     */
     public void agregarPaciente(Paciente paciente);
     public Paciente obtenerPacientePorId(int id);
     //Lista de pacientes aqui

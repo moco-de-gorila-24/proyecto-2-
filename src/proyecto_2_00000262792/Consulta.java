@@ -11,6 +11,10 @@ public class Consulta {
     }
 
     public Consulta(int id, Paciente paciente, Medico medico, String fecha){
+        this.id = id;
+        this.paciente = paciente;
+        this.medico = medico;
+        this.fecha = fecha;
 
     }
 

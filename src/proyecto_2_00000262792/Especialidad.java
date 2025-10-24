@@ -9,7 +9,8 @@ public class Especialidad {
     }
 
     public Especialidad(int id, String nombre){
-
+        this.id = id;
+        this.nombre = nombre;
     }
 
     public int getId() {

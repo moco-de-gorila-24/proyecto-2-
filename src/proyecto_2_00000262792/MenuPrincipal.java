@@ -1,19 +1,27 @@
 package proyecto_2_00000262792;
 
-import proyecto_2_00000262792.Persistencia.PersistenciaFachada;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MenuPrincipal extends JFrame {
 
     public void mostrar(){
         setTitle("Hospital");
+        setLayout(new BorderLayout());
         setSize(800,550);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         JPanel panelMenuBar = new JPanel();
+        JPanel panelTexto = new JPanel();
+        JTextArea textArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(textArea);
         setLayout(new BorderLayout());
+        JPanel panel = new JPanel();
+
+
+
         JMenuBar menuBar = new JMenuBar();
 
         JMenu Paciente = new JMenu("Paciente");
@@ -65,9 +73,28 @@ public class MenuPrincipal extends JFrame {
         Consulta.add(listarConsultas);
         menuBar.add(Consulta);
 
+
+        panelTexto.add(scrollPane);
+        add(panelTexto, BorderLayout.CENTER);
+
+        agregarPaciente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Paciente paciente = new Paciente();
+                new AgregarDialog();
+
+
+
+            }
+        });
+
+
+
         panelMenuBar.add(menuBar);
-        add(panelMenuBar, BorderLayout.CENTER);
+        add(panelMenuBar, BorderLayout.NORTH);
 
         setVisible(true);
     }
+
+
 }

@@ -10,7 +10,10 @@ public class Paciente {
     }
 
     public Paciente(int id, String nombre, int edad, String direccion){
-
+        this.id = id;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.direccion = direccion;
     }
 
     public int getId() {
