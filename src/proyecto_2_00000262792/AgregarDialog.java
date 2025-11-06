@@ -144,8 +144,89 @@ public class AgregarDialog extends JDialog {
 
             }
         });
-
         setVisible(true);
+    }
+
+    public void agregarMedico(){
+        setSize(400, 200);
+        setTitle("Agregar medico");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5,5,5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panelSur = new JPanel();
+        JButton agregar = new JButton("Agregar");
+
+        JLabel labelId = new JLabel("Ingrese el id del medico:    ");
+        JTextField id = new JTextField(10);
+
+        JLabel labelNombre = new JLabel("Ingrese el nombre del medico:   ");
+        JTextField nombre = new JTextField(10);
+
+        JLabel labelEspecialidad = new JLabel("Ingrese el id de la especialidad del medico: ");
+        JTextField especialidad = new JTextField(10);
+
+        agregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PersistenciaFachada persistencia = new PersistenciaFachada();
+                try{
+                    if(id.getText().isEmpty() || nombre.getText().isEmpty() || especialidad.getText().isEmpty()){
+                        JOptionPane.showMessageDialog(null, "No puede dejar campos vacios");
+                        return;
+                    }
+
+                    if (Integer.parseInt(id.getText()) < 0){
+                        JOptionPane.showMessageDialog(null, "No pueden haber id negativas");
+                        return;
+                    }
+
+                    int idEspecialidad = persistencia.obtenerEspecialidadPorId(Integer.parseInt(especialidad.getText())).getId();
+                    String nombreEspecialidad = persistencia.obtenerEspecialidadPorId(Integer.parseInt(especialidad.getText())).getNombre();
+                    Especialidad especialidad = new Especialidad(idEspecialidad,nombreEspecialidad);
+
+                    Medico medico = new Medico(Integer.parseInt(id.getText()),nombre.getText(),especialidad);
+
+
+                    persistencia.agregarMedico(medico);
+
+
+
+                }
+                catch (InputMismatchException ex){
+                    JOptionPane.showMessageDialog(null, "Dato no valido");
+                }
+
+
+
+            }
+        });
+
+        gbc.gridx = 0; gbc.gridy = 0;
+        panel.add(labelId, gbc);
+        gbc.gridx = 1;
+        panel.add(id, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(labelNombre, gbc);
+        gbc.gridx = 1;
+        panel.add(nombre, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(labelEspecialidad, gbc);
+        gbc.gridx = 1;
+        panel.add(especialidad, gbc);
+
+        panelSur.add(agregar);
+
+        add(panelSur,BorderLayout.SOUTH);
+        add(panel, BorderLayout.CENTER);
+        setVisible(true);
+
     }
 
     public void agregarEspecialidad(){
@@ -171,9 +252,6 @@ public class AgregarDialog extends JDialog {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Especialidad especialidad = new Especialidad(Integer.parseInt(id.getText()), nombre.getText());
-                PersistenciaFachada persistenciaFachada = new PersistenciaFachada();
-
                 try{
 
                     int opcion = JOptionPane.showConfirmDialog(null, "Desea agregar esta especialidad");
@@ -194,8 +272,10 @@ public class AgregarDialog extends JDialog {
                     }
 
                     if(opcion == JOptionPane.YES_OPTION){
+                        Especialidad especialidad = new Especialidad(Integer.parseInt(id.getText()), nombre.getText());
+                        PersistenciaFachada persistenciaFachada = new PersistenciaFachada();
+
                         persistenciaFachada.agregarEspecialidad(especialidad);
-                        JOptionPane.showMessageDialog(null,"Especialidad agregada correctamente");
                     }
 
                 }
