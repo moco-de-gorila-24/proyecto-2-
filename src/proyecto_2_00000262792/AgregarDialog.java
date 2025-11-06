@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.InputMismatchException;
 
 public class AgregarDialog extends JDialog {
@@ -15,14 +19,14 @@ public class AgregarDialog extends JDialog {
     }
 
     public void agregarPaciente(){
-        setSize(550,400);
+        setSize(450,310);
         setTitle("Agregar paciente");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         JPanel panelCentro = new JPanel();
         JPanel panelSur = new JPanel();
-        panelCentro.setLayout(new GridLayout(4,2,10,60));
+        panelCentro.setLayout(new GridLayout(4,2,10,10));
 
         JLabel labelId = new JLabel("Ingrese el id del paciente");
         JLabel labelNombre = new JLabel("Ingrese el nombre del paciente");
@@ -41,19 +45,14 @@ public class AgregarDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+                    PersistenciaFachada persistenciaFachada = new PersistenciaFachada();
+
                     int opcion = JOptionPane.showConfirmDialog(null, "Seguro que quiere agregar este paciente?");
 
                     if(textFieldId.getText().isEmpty() || textFieldNombre.getText().isEmpty() || textFieldEdad.getText().isEmpty() || textFieldDireccion.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "no puede dejar ningun campo vacio");
                         return;
                     }
-
-                   /*
-                   condicion que valida si ya existe
-                   if(Integer.parseInt(textFieldId.getText()).){
-
-                   }
-                    */
 
                     if(Integer.parseInt(textFieldId.getText()) < 0){
                         JOptionPane.showMessageDialog(null, "Esta id no es valida");
@@ -62,11 +61,8 @@ public class AgregarDialog extends JDialog {
 
                     if(opcion == JOptionPane.YES_OPTION){
                         Paciente paciente = new Paciente(Integer.parseInt(textFieldId.getText()),textFieldNombre.getText(),Integer.parseInt(textFieldEdad.getText()),textFieldDireccion.getText());
-                        PersistenciaFachada persistenciaFachada = new PersistenciaFachada();
-
                         persistenciaFachada.agregarPaciente(paciente);
 
-                        JOptionPane.showMessageDialog(null, "paciente agregado con exito");
                     }
 
 
@@ -75,7 +71,6 @@ public class AgregarDialog extends JDialog {
                     JOptionPane.showMessageDialog(null, "Debe ingresar un dato valido");
                     return;
                 }
-
             }
         });
 
@@ -93,6 +88,62 @@ public class AgregarDialog extends JDialog {
         panelSur.add(button);
         add(panelCentro, BorderLayout.CENTER);
         add(panelSur, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    public void buscarPacientePorId(){
+        setSize(350,200);
+        setTitle("Buscar pacientes");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        JPanel panelNorte = new JPanel();
+        JPanel panelCentro = new JPanel();
+        JPanel panelSur = new JPanel();
+
+        JTextField id = new JTextField(10);
+        JTextArea textArea = new JTextArea();
+        JLabel label = new JLabel("Ingrese el id que desea buscar");
+        JButton button = new JButton("Buscar");
+
+        panelNorte.add(label);
+        panelNorte.add(id);
+        panelSur.add(button);
+        panelCentro.add(textArea);
+
+        add(panelNorte,BorderLayout.NORTH);
+        add(panelCentro,BorderLayout.CENTER);
+        add(panelSur,BorderLayout.SOUTH);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PersistenciaFachada persistenciaFachada = new PersistenciaFachada();
+                try {
+                    persistenciaFachada.obtenerPacientePorId(Integer.parseInt(id.getText()));
+
+                    String idString = id.getText();
+
+                    Paciente paciente = new Paciente();
+
+                    textArea.setText("Paciente encontrado: " + "\n" +
+                                     "ID: " + String.valueOf(persistenciaFachada.obtenerPacientePorId(Integer.parseInt(id.getText())).getId()+ "\n" +
+                                     "Nombre: " + String.valueOf(persistenciaFachada.obtenerPacientePorId(Integer.parseInt(id.getText())).getNombre() + "\n" +
+                                     "Edad: " + String.valueOf(persistenciaFachada.obtenerPacientePorId(Integer.parseInt(id.getText())).getEdad() + "\n" +
+                                     "Direccion: " + String.valueOf(persistenciaFachada.obtenerPacientePorId(Integer.parseInt(id.getText())).getDireccion())))));
+
+
+                }
+                catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Paciente no encontrado");
+                }
+                catch (NullPointerException ex){
+                    JOptionPane.showMessageDialog(null, "Paciente no encontrado");
+                }
+
+            }
+        });
 
         setVisible(true);
     }
@@ -146,7 +197,6 @@ public class AgregarDialog extends JDialog {
                         persistenciaFachada.agregarEspecialidad(especialidad);
                         JOptionPane.showMessageDialog(null,"Especialidad agregada correctamente");
                     }
-
 
                 }
                 catch(NumberFormatException ex){
