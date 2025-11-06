@@ -24,12 +24,12 @@ public class PersistenciaFachada implements IPersistenciaFachada{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathPacientes.toString(), true))) {
             String idString = String.valueOf(paciente.getId());
 
-            if(!existeId(idString) == true){
+            if(!existeIdPacientes(idString) == true){
                 writer.write( paciente.getId() + " " +  paciente.getNombre()  + " " + paciente.getEdad() + " " + paciente.getDireccion() );
                 writer.newLine();
                 JOptionPane.showMessageDialog(null, "Paciente agregado con exito");
+                return;
             }
-
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al escribir datos");
@@ -67,7 +67,18 @@ public class PersistenciaFachada implements IPersistenciaFachada{
 
     @Override
     public void agregarMedico(Medico medico) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(pathMedicos.toString(), true))) {
+            String idString = String.valueOf(medico.getId());
 
+            if(!existeIdMedicos(idString) == true){
+                writer.write( medico.getId() + " " +  medico.getNombre()  + " " + medico.getEspecialidad().getId() + " " + medico.getEspecialidad().getNombre() );
+                writer.newLine();
+                JOptionPane.showMessageDialog(null, "Medico agregado con exito");
+                return;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al escribir datos");
+        }
     }
 
     @Override
@@ -79,8 +90,12 @@ public class PersistenciaFachada implements IPersistenciaFachada{
     public void agregarEspecialidad(Especialidad especialidad) {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(pathEspecialidades.toString(),true))){
 
-            writer.write( especialidad.getId() + " " + especialidad.getNombre());
-            writer.newLine();
+            if(!existeIdEspecialidad(String.valueOf(especialidad.getId()))){
+                writer.write( especialidad.getId() + " " + especialidad.getNombre());
+                writer.newLine();
+                JOptionPane.showMessageDialog(null, "Especialidad agregada con exito");
+                return;
+            }
         }
         catch(IOException e){
             JOptionPane.showMessageDialog(null, "Error al escribir los datos");
@@ -89,6 +104,28 @@ public class PersistenciaFachada implements IPersistenciaFachada{
 
     @Override
     public Especialidad obtenerEspecialidadPorId(int id) {
+        try{
+            BufferedReader reader = Files.newBufferedReader(Paths.get(pathEspecialidades.toString()));
+            String linea;
+
+            while ((linea = reader.readLine()) != null) {
+                if (linea.startsWith(((String.valueOf(id))))){
+                    String[] datos = linea.split(" ");
+
+                    if(datos.length >= 2) {
+                        int idEspecialidad = Integer.parseInt(datos[0]);
+                        String nombreEspecialidad = datos[1];
+
+                        Especialidad especialidad = new Especialidad(idEspecialidad, nombreEspecialidad);
+
+                        return especialidad;
+                    }
+                }
+            }
+        }
+        catch (NullPointerException | IOException ex){
+            JOptionPane.showMessageDialog(null, "Especialidad no encontrada");
+        }
         return null;
     }
 
@@ -106,7 +143,7 @@ public class PersistenciaFachada implements IPersistenciaFachada{
     public void programarConsulta(Consulta consulta) {
 
     }
-    public boolean existeId(String id) throws IOException {
+    public boolean existeIdPacientes(String id) throws IOException {
         BufferedReader reader = Files.newBufferedReader(Paths.get(pathPacientes.toString()));
         String linea;
 
@@ -116,11 +153,36 @@ public class PersistenciaFachada implements IPersistenciaFachada{
 
                 return true;
             }
-
         }
-
-
         return false;
     }
+
+    public boolean existeIdMedicos(String id) throws IOException {
+        BufferedReader reader = Files.newBufferedReader(Paths.get(pathMedicos.toString()));
+        String linea;
+
+        while ((linea = reader.readLine()) != null) {
+            if (linea.contains(id)) {
+                JOptionPane.showMessageDialog(null, "Este id ya lo ocupa otro medico");
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existeIdEspecialidad(String id) throws IOException {
+        BufferedReader reader = Files.newBufferedReader(Paths.get(pathEspecialidades.toString()));
+        String linea;
+
+        while ((linea = reader.readLine()) != null) {
+            if (linea.contains(id)) {
+                JOptionPane.showMessageDialog(null, "Este id ya lo ocupa otra Especialidad");
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
