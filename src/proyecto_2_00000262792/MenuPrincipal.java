@@ -20,15 +20,12 @@ public class MenuPrincipal extends JFrame {
         setLayout(new BorderLayout());
         JPanel panel = new JPanel();
 
-
-
         JMenuBar menuBar = new JMenuBar();
 
         JMenu Paciente = new JMenu("Paciente");
         JMenuItem agregarPaciente = new JMenuItem("Agregar paciente");
         JMenuItem buscarPacientePorId = new JMenuItem("Buscar paciente por id");
         JMenuItem listarPacientes = new JMenuItem("Listar pacientes");
-
 
         Paciente.add(agregarPaciente);
         Paciente.add(buscarPacientePorId);
@@ -72,23 +69,34 @@ public class MenuPrincipal extends JFrame {
         Consulta.add(programarConsulta);
         Consulta.add(listarConsultas);
         menuBar.add(Consulta);
-
-
+        
         panelTexto.add(scrollPane);
         add(panelTexto, BorderLayout.CENTER);
 
         agregarPaciente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Paciente paciente = new Paciente();
-                new AgregarDialog();
-
-
+                AgregarDialog agregar = new AgregarDialog();
+                agregar.agregarPaciente();
 
             }
         });
 
+        buscarPacientePorId.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AgregarDialog agregar = new AgregarDialog();
+                agregar.buscarPacientePorId();
+            }
+        });
 
+        agregarEspecialidad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AgregarDialog agregar = new AgregarDialog();
+                agregar.agregarEspecialidad();
+            }
+        });
 
         panelMenuBar.add(menuBar);
         add(panelMenuBar, BorderLayout.NORTH);
