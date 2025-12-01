@@ -9,8 +9,6 @@ public class Medico {
 
     }
 
-
-
     public Medico(int id, String nombre, Especialidad especialidad){
         this.id = id;
         this.nombre = nombre;
